@@ -138,7 +138,7 @@ class SwiplKernel(Kernel):
         if not silent:
             # We run the Prolog code and get the output.
             with tempfile.NamedTemporaryFile(suffix=".pl", delete=False) as kb_file:
-                output = run_cell(code, kb_file)
+                output, ok = run_cell(code, kb_file)
 
             # We send back the result to the frontend.
             stream_content = {'name': 'stdout',
