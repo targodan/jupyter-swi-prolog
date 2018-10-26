@@ -14,6 +14,7 @@ SWIPL_READ_TIMEOUT = 30
 def enqueue_output(out, queue):
     try:
         for line in iter(out.readline, b''):
+            print(line)
             queue.put(line.decode(SWIPL_ENCODING))
     finally:
         queue.put(None)
@@ -36,6 +37,8 @@ def run_swipl(queries, kb_path):
         while True:
             try:
                 line = out.get(timeout=0.1)
+                if line is None:
+                    break
                 if "ERROR:" in line:
                     output.append(line)
             except Empty:
@@ -105,7 +108,7 @@ def run_cell(code, kb_file):
                 return output, False
         else:
             # Is part of the knowledgebase
-            kb_file.write(line+"\n")
+            kb_file.write((line+"\n").encode(SWIPL_ENCODING))
 
     return output, True
 
@@ -146,7 +149,8 @@ class SwiplKernel(Kernel):
                }
 
 if __name__ == '__main__':
-    with open("temp.pl", 'w') as kb_file:
+    with tempfile.NamedTemporaryFile(suffix=".pl", delete=False) as kb_file:
+        print(kb_file.name)
         output, ok = run_cell("""man(socrates).
                                 mortal(X) :- man(X).
 
