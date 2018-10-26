@@ -14,7 +14,6 @@ SWIPL_READ_TIMEOUT = 30
 def enqueue_output(out, queue):
     try:
         for line in iter(out.readline, b''):
-            print('Q <- {0}'.format(line))
             queue.put(line.decode(SWIPL_ENCODING))
     finally:
         queue.put(None)
