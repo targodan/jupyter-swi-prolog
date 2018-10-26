@@ -20,11 +20,11 @@ def enqueue_output(out, queue):
         out.close()
 
 """
-Executes swipl with `knowledgebase_path` as script input and a list of `queries`
+Executes swipl with `kb_path` as script input and a list of `queries`
 It returns the lines of output and True iff. the execution was successful.
 """
-def run_swipl(queries, knowledgebase_path):
-    with sp.Popen(["swipl", "-s", knowledgebase_path], stdout=sp.PIPE, stderr=sp.PIPE, stdin=sp.PIPE) as proc:
+def run_swipl(queries, kb_path):
+    with sp.Popen(["swipl", "-s", kb_path], stdout=sp.PIPE, stderr=sp.PIPE, stdin=sp.PIPE) as proc:
         out = Queue()
         t1 = Thread(target=enqueue_output, args=(proc.stdout, out))
         t1.start()
@@ -87,35 +87,27 @@ def run_swipl(queries, knowledgebase_path):
 
         return output, ok
 
-def run_cell(code, temp_path):
+def run_cell(code, kb_file):
     output = []
-    with open(temp_path, 'w') as kb:
-        for line in code.split("\n"):
-            line = line.strip()
+    for line in code.split("\n"):
+        line = line.strip()
 
-            if line[:2] == "?-":
-                # Is query => flush KB and execute
-                kb.flush()
+        if line[:2] == "?-":
+            # Is query => flush KB and execute
+            kb_file.flush()
 
-                line = line[2:]
-                # TODO: batch queries in a list
-                tmpOutput, ok = run_swipl([line], temp_path)
-                output += tmpOutput
+            line = line[2:]
+            # TODO: batch queries in a list
+            tmpOutput, ok = run_swipl([line], kb_file.name)
+            output += tmpOutput
 
-                if not ok:
-                    return output, False
-            else:
-                # Is part of the knowledgebase
-                kb.write(line+"\n")
+            if not ok:
+                return output, False
+        else:
+            # Is part of the knowledgebase
+            kb_file.write(line+"\n")
 
     return output, True
-
-def setup_env():
-    dirpath =  tempfile.mkdtemp()
-    temp_path = op.join(dirpath, 'temp.pl')
-    output_path = op.join(dirpath, 'out.txt')
-    code_path = op.join(dirpath, 'code.pl')
-    return temp_path, output_path, code_path
 
 
 """SWI-Prolog kernel wrapper"""
@@ -154,15 +146,16 @@ class SwiplKernel(Kernel):
                }
 
 if __name__ == '__main__':
-    output, ok = run_cell("""man(socrates).
-                            mortal(X) :- man(X).
+    with open("temp.pl", 'w') as kb_file:
+        output, ok = run_cell("""man(socrates).
+                                mortal(X) :- man(X).
 
-                            ?- mortal(socrates).
-                            ?- mortal(X).
-                            ?- mortal(socrates2).
-                            man(socrates2).
-                            ?- mortal(socrates2).
-                            """, "temp.pl")
+                                ?- mortal(socrates).
+                                ?- mortal(X).
+                                ?- mortal(socrates2).
+                                man(socrates2).
+                                ?- mortal(socrates2).
+                                """, kb_file)
     if ok:
         print("OK\n")
     else:
