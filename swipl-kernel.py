@@ -150,22 +150,5 @@ class SwiplKernel(Kernel):
                }
 
 if __name__ == '__main__':
-    with tempfile.NamedTemporaryFile(suffix=".pl", delete=False) as kb_file:
-        print(kb_file.name)
-        output, ok = run_cell("""man(socrates).
-                                mortal(X) :- man(X).
-
-                                ?- mortal(socrates).
-                                ?- mortal(X).
-                                ?- mortal(socrates2).
-                                man(socrates2).
-                                ?- mortal(socrates2).
-                                """, kb_file)
-    if ok:
-        print("OK\n")
-    else:
-        print("NOT OK\n")
-
-    print("\n".join(output))
-    #from ipykernel.kernelapp import IPKernelApp
-    #IPKernelApp.launch_instance(kernel_class=SwiplKernel)
+    from ipykernel.kernelapp import IPKernelApp
+    IPKernelApp.launch_instance(kernel_class=SwiplKernel)
