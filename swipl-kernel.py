@@ -11,6 +11,10 @@ from threading import Thread
 SWIPL_ENCODING = "utf-8"
 SWIPL_READ_TIMEOUT = 30
 
+def main():
+    from ipykernel.kernelapp import IPKernelApp
+    IPKernelApp.launch_instance(kernel_class=SwiplKernel)
+
 def enqueue_output(out, queue):
     try:
         for line in iter(out.readline, b''):
@@ -150,5 +154,4 @@ class SwiplKernel(Kernel):
                }
 
 if __name__ == '__main__':
-    from ipykernel.kernelapp import IPKernelApp
-    IPKernelApp.launch_instance(kernel_class=SwiplKernel)
+    main()
