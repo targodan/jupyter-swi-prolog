@@ -2,7 +2,19 @@ import os
 import os.path as op
 import tempfile
 from pyswip import Prolog
+from pyswip import Functor
 from pyswip.prolog import PrologError
+
+def format_value(value):
+    output = ""
+    if type(value) is list:
+        output = "[ " + ", ".join([format_value(val) for val in value]) + " ]"
+    elif type(value) is Functor and value.arity == 2:
+        output = "{0}{1}{2}".format(value.args[0], value.name, value.args[1])
+    else:
+        output = "{}".format(value)
+
+    return output
 
 def format_result(result):
     result = list(result)
@@ -16,14 +28,8 @@ def format_result(result):
     output = ""
     for res in result:
         for var in res:
-            output += var + " = "
-            if type(res[var]) is list:
-                for val in res[var]:
-                    output += "{}".format(val)
-            else:
-                output += res[var]
-            output += ", "
-        output = output[:-2] + " ;\n"
+            output += var + " = " + format_value(res[var])
+        output += " ;\n"
     output = output[:-3] + " ."
 
     return output
