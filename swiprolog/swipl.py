@@ -54,11 +54,28 @@ def run(code):
         tmp += " " + line
 
         if tmp[-1] == ".":
-            tmp = tmp[:-1]
             # End of statement
+            tmp = tmp[:-1] # Removes "."
+            maxresults = -1
+            # Checks for maxresults
+            if tmp[-1] == "}":
+                tmp = tmp[:-1] # Removes "."
+                limitStart = tmp.rfind('{')
+                if limitStart == -1:
+                    ok = False
+                    output.append("ERROR: Found '}' before '.' but opening '{' is missing!")
+                else:
+                    limit = tmp[limitStart+1:]
+                    try:
+                        maxresults = int(limit)
+                    except:
+                        ok = False
+                        output.append("ERROR: Invalid limit {" + limit + "}!")
+                    tmp = tmp[:limitStart]
+
             try:
                 if isQuery:
-                    output.append(format_result(prolog.query(tmp)))
+                    output.append(format_result(prolog.query(tmp, maxresult=maxresults)))
                 else:
                     prolog.assertz(tmp)
             except PrologError as error:

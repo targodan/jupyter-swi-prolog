@@ -39,20 +39,24 @@ neighbours(spain          , [france, portugal]).
 neighbours(sweden         , [finland, denmark]).
 neighbours(united_kingdom , [ireland, netherlands, belgium, france]).
 
-colour_countries(Colours) :- setof(Country/_, X^neighbours(Counry, X), Colours), colours(Colours).
+colour_countries(Colours) :-
+    setof(Country/_, X^neighbours(Country,X), Colours),
+    colours(Colours).
 
 colours([]).
-colours([Country/Color | Rest]) :-
+colours([Country/Colour | Rest]):-
     colours(Rest),
     member(Colour, [green, yellow, red, purple]),
     \+ (member(CountryA/Colour, Rest), neighbour(Country, CountryA)).
 
-neighbour(Country, CountryA) :- neighbours(Country, Neighbours), member(CountryA, Neighbours).
+neighbour(Country, CountryA):-
+    neighbours(Country, Neighbours),
+    member(CountryA, Neighbours).
 
 member(X, [X|_]).
 member(X, [_|Tail]) :- member(X, Tail).
 
-?- colour_countries(Map).
+?- colour_countries(Map){2}.
     """)
 
     if ok:
