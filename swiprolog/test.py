@@ -4,20 +4,23 @@ import tempfile
 import swipl
 
 def main():
-    with tempfile.NamedTemporaryFile(suffix=".pl") as kb_file:
-        output, ok = swipl.run_cell("""
-        man(socrates).
+    output, ok = swipl.run("""
+    man(socrates).
+    mortal(X) :- man(X).
 
-        ?- man(socrates).
-        ?- man(socrates).
-        """, kb_file)
+    just some stuff
 
-        if ok:
-            print("OK")
-        else:
-            print("NOT OK")
+    ?- man(socrates).
+    ?- mortal(X).
+    ?- mortal(yourMom).
+    """)
 
-        print("\n".join(output))
+    if ok:
+        print("OK")
+    else:
+        print("NOT OK")
+
+    print("\n".join(output))
 
 if __name__ == "__main__":
     main()

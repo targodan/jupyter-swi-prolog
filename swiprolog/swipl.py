@@ -1,110 +1,59 @@
 import os
 import os.path as op
 import tempfile
-import IPython
-import subprocess as sp
-from queue import Queue, Empty
-from threading import Thread
+from pyswip import Prolog
+from pyswip.prolog import PrologError
 
-SWIPL_ENCODING = "utf-8"
-SWIPL_READ_TIMEOUT = 30
+def format_result(result):
+    result = list(result)
 
-def enqueue_output(out, queue):
-    try:
-        for line in iter(out.readline, b''):
-            queue.put(line.decode(SWIPL_ENCODING))
-    finally:
-        queue.put(None)
-        out.close()
+    if len(result) == 0:
+        return "false."
 
-"""
-Executes swipl with `kb_path` as script input and a list of `queries`
-It returns the lines of output and True iff. the execution was successful.
-"""
-def run_swipl(queries, kb_path):
-    with sp.Popen(["swipl", "-s", kb_path], stdout=sp.PIPE, stderr=sp.PIPE, stdin=sp.PIPE) as proc:
-        out = Queue()
-        t1 = Thread(target=enqueue_output, args=(proc.stdout, out))
-        t1.start()
-        t2 = Thread(target=enqueue_output, args=(proc.stderr, out))
-        t2.start()
+    if len(result) == 1 and len(result[0]) == 0:
+        return "true."
 
-        output = []
-        # Consume welcome message and check for errors in KB.
-        while True:
-            try:
-                line = out.get(timeout=0.1)
-                if line is None:
-                    break
-                if "ERROR:" in line:
-                    output.append(line)
-            except Empty:
-                break
+    output = ""
+    for res in result:
+        for var in res:
+            output += var + " = " + res[var] + ", "
+        output = output[:-2] + " ;\n"
+    output = output[:-3] + " ."
 
-        if len(output) > 0:
-            proc.stdin.close()
-            t1.join()
-            t2.join()
-            return output, False
+    return output
 
-        # No errors => continue
+def run(code):
+    prolog = Prolog()
 
-        # Write all queries
-        for query in queries:
-            proc.stdin.write((query+"\n").encode(SWIPL_ENCODING))
-
-        proc.stdin.flush()
-        proc.stdin.close()
-
-        # Assume success until we see an error.
-        ok = True
-
-        # Consume output
-        while True:
-            try:
-                line = out.get(timeout=SWIPL_READ_TIMEOUT)
-                if line is None:
-                    # End of output
-                    break
-
-                line = line.strip()
-                if line == "" or line[0] == "%":
-                    # Empty line or comment (like "% halt")
-                    continue
-
-                # Save output
-                output.append(line)
-
-                if "ERROR:" in line:
-                    # Error, this is not ok...
-                    ok = False
-            except Empty:
-                break
-
-        # Join the reader threads
-        t1.join()
-        t2.join()
-
-        return output, ok
-
-def run_cell(code, kb_file):
     output = []
+    ok = True
+
+    tmp = ""
+    isQuery = False
     for line in code.split("\n"):
         line = line.strip()
+        if line == "":
+            continue
 
         if line[:2] == "?-":
-            # Is query => flush KB and execute
-            kb_file.flush()
-
+            isQuery = True
             line = line[2:]
-            # TODO: batch queries in a list
-            tmpOutput, ok = run_swipl([line], kb_file.name)
-            output += tmpOutput
 
-            if not ok:
-                return output, False
-        else:
-            # Is part of the knowledgebase
-            kb_file.write((line+"\n").encode(SWIPL_ENCODING))
+        tmp += " " + line
 
-    return output, True
+        if tmp[-1] == ".":
+            tmp = tmp[:-1]
+            # End of statement
+            try:
+                if isQuery:
+                    output.append(format_result(prolog.query(tmp)))
+                else:
+                    prolog.assertz(tmp)
+            except PrologError as error:
+                ok = False
+                output.append("ERROR: {}".format(error))
+
+            tmp = ""
+            isQuery = False
+
+    return output, ok

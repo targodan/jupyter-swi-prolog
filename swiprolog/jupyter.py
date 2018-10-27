@@ -5,12 +5,11 @@ import IPython
 import subprocess as sp
 from queue import Queue, Empty
 from threading import Thread
-from swiprolog import swipl
+import swipl
 
 def main():
     from ipykernel.kernelapp import IPKernelApp
     IPKernelApp.launch_instance(kernel_class=SwiplKernel)
-
 
 """SWI-Prolog kernel wrapper"""
 from ipykernel.kernelbase import Kernel
@@ -32,8 +31,7 @@ class SwiplKernel(Kernel):
         executed."""
         if not silent:
             # We run the Prolog code and get the output.
-            with tempfile.NamedTemporaryFile(suffix=".pl") as kb_file:
-                output, ok = swipl.run_cell(code, kb_file)
+            output, ok = swipl.run(code)
 
             # We send back the result to the frontend.
             stream_content = {'name': 'stdout',
