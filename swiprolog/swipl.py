@@ -16,7 +16,13 @@ def format_result(result):
     output = ""
     for res in result:
         for var in res:
-            output += var + " = " + res[var] + ", "
+            output += var + " = "
+            if type(res[var]) is list:
+                for val in res[var]:
+                    output += "{}".format(val)
+            else:
+                output += res[var]
+            output += ", "
         output = output[:-2] + " ;\n"
     output = output[:-3] + " ."
 
