@@ -77,7 +77,9 @@ def run(code):
 
             try:
                 if isQuery:
-                    output.append(format_result(prolog.query(tmp, maxresult=maxresults)))
+                    result = prolog.query(tmp, maxresult=maxresults)
+                    output.append(format_result(result))
+                    result.close()
                 else:
                     prolog.assertz(tmp)
             except PrologError as error:
