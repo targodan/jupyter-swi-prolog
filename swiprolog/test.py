@@ -56,7 +56,7 @@ neighbour(Country, CountryA):-
 member(X, [X|_]).
 member(X, [_|Tail]) :- member(X, Tail).
 
-?- colour_countries(Map){2}.
+?- colour_countries(Map){1}.
     """)
 
     if ok:
