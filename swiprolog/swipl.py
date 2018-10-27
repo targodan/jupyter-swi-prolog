@@ -5,6 +5,8 @@ from pyswip import Prolog
 from pyswip import Functor
 from pyswip.prolog import PrologError
 
+DEFAULT_LIMIT = 100
+
 def format_value(value):
     output = ""
     if type(value) is list:
@@ -56,7 +58,7 @@ def run(code):
         if tmp[-1] == ".":
             # End of statement
             tmp = tmp[:-1] # Removes "."
-            maxresults = -1
+            maxresults = DEFAULT_LIMIT
             # Checks for maxresults
             if tmp[-1] == "}":
                 tmp = tmp[:-1] # Removes "."
