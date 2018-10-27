@@ -3,13 +3,13 @@ A Jupyter Kernel for SWI-Prolog.
 
 Inspired by [madmax2012/SWI-Prolog-Kernel](https://github.com/madmax2012/SWI-Prolog-Kernel).
 
-**USE WITH CARE!***
+**USE WITH CARE!**
 
 This kernel is only barely tested using jupyter lab on debian linux. If anyone tests it e. g. on plain jupyter and/or windows feel free to open a ticket to report success and/or failure.
 
 I have only just started out learning prolog and have not tested this kernel with all language constructs of prolog yet. There might still be problems with more advanced prolog stuff.
 
-**Changes likely!***
+**Changes likely!**
 
 So far the installation is rather uncomfortable (see below). In the long run it would be nice to have a proper pip package and an install command. This means however that the installation process would completely change and there would probably be some renaming and refactoring happening. Potentially even down to the filename.
 
@@ -39,6 +39,16 @@ true.
 X = socrates.
 false.
 ```
+
+Keep in mind that for some queries there are lots of answers. For the kernel to always succeed in a reasonable amount of time the default output limit to any one query is 100 answers. You can influence this limit by the following syntax.
+
+```
+?- someQuery(...) {LIMIT}.
+```
+
+Where `LIMIT` is replaced by the maximum number of answers that will be displayed for this query. It is not very smartly parsed (sorry), so there must be no spaces inside the curly braces or in between the closing curly brace and the period. *Not like this:* ~`{1} .`~ or this ~`{ 1 }.`~
+
+A limit value of `-1` means no limit. Be careful with this!
 
 ## Supported environments
 
