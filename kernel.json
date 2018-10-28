@@ -1,6 +1,6 @@
 {
     "argv": [
-        "jswipkernel",
+        "jswiplkernel",
         "-f",
         "{connection_file}"
     ],
