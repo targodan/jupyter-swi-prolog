@@ -1,19 +1,13 @@
 # jswip
 A Jupyter Kernel for SWI-Prolog.
 
-Inspired by [madmax2012/SWI-Prolog-Kernel](https://github.com/madmax2012/SWI-Prolog-Kernel).
+Inspired by [madmax2012/SWI-Prolog-Kernel](https://github.com/madmax2012/SWI-Prolog-Kernel) and now using [PySwip](https://github.com/yuce/pyswip).
 
 **USE WITH CARE!**
 
 This kernel is only barely tested using jupyter lab on debian linux. If anyone tests it e. g. on plain jupyter and/or windows feel free to open a ticket to report success and/or failure.
 
 I have only just started out learning prolog and have not tested this kernel with all language constructs of prolog yet. There might still be problems with more advanced prolog stuff.
-
-**Changes likely!**
-
-So far the installation is rather uncomfortable (see below). In the long run it would be nice to have a proper pip package and an install command. This means however that the installation process would completely change and there would probably be some renaming and refactoring happening. Potentially even down to the filename.
-
-If you still want to use it already feel free to follow the installation steps below. Keep an eye on #3 as any pip-progress will be reported there.
 
 ## Usage Notes and Limitations
 
@@ -59,11 +53,16 @@ Only **pyhton3** is supported (anybody still using python2 should really have up
 ## Installation
 
 1. Install [SWI-Prolog](http://www.swi-prolog.org).
-2. Change directory to your jupyters kernel directory. In my case this is `/home/jupyter/.local/share/jupyter/kernels`.
-3. `git clone https://github.com/targodan/jupyter-swi-prolog.git swi-prolog && cd swi-prolog`
-4. Change the file `kernel.json` such that the path in line 4 matches where you just cloned this repository to.
-5. Restart jupyter
-6. Profit
+2. Install jswipl `python3 -m pip install --upgrade --user jswipl`
+3. Change directory to your jupyters kernel directory. Typically `~/.local/share/jupyter/kernels`.
+4. `mkdir jswipl && cd jswipl`
+5. Install kernel spec: `wget https://raw.githubusercontent.com/targodan/jupyter-swi-prolog/master/kernel.json`
+6. Restart jupyter
+7. Profit
+
+## Upgrading
+
+Keeping up to date is as simple as running `python3 -m pip install --upgrade --user jswipl` from time to time.
 
 ## Contributing
 
