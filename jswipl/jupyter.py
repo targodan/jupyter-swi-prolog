@@ -1,11 +1,4 @@
-import os
-import os.path as op
-import tempfile
-import IPython
-import subprocess as sp
-from queue import Queue, Empty
-from threading import Thread
-import swipl
+from . import swipl
 
 def main():
     from ipykernel.kernelapp import IPKernelApp
@@ -16,7 +9,7 @@ from ipykernel.kernelbase import Kernel
 
 class SwiplKernel(Kernel):
     implementation = 'SWI-Prolog'
-    implementation_version = '0.0'
+    implementation_version = '1.0.0'
     language = 'Prolog'
     language_version = '1.0'
     language_info = {'name': 'swipl',
@@ -45,6 +38,3 @@ class SwiplKernel(Kernel):
                 'payload': [],
                 'user_expressions': {},
                }
-
-if __name__ == '__main__':
-    main()

@@ -1,7 +1,6 @@
 {
     "argv": [
-        "python3",
-        "/home/jupyter/.local/share/jupyter/kernels/swi-prolog/swiprolog/jupyter.py",
+        "jswiplkernel",
         "-f",
         "{connection_file}"
     ],

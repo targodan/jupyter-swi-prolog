@@ -1,17 +1,14 @@
-import os
-import os.path as op
-import tempfile
 from pyswip import Prolog
 from pyswip import Functor
 from pyswip.prolog import PrologError
 
-DEFAULT_LIMIT = 100
+DEFAULT_LIMIT = 10
 
 def format_value(value):
     output = ""
-    if type(value) is list:
+    if isinstance(value, list):
         output = "[ " + ", ".join([format_value(val) for val in value]) + " ]"
-    elif type(value) is Functor and value.arity == 2:
+    elif isinstance(value, Functor) and value.arity == 2:
         output = "{0}{1}{2}".format(value.args[0], value.name, value.args[1])
     else:
         output = "{}".format(value)
@@ -77,7 +74,9 @@ def run(code):
 
             try:
                 if isQuery:
-                    output.append(format_result(prolog.query(tmp, maxresult=maxresults)))
+                    result = prolog.query(tmp, maxresult=maxresults)
+                    output.append(format_result(result))
+                    result.close()
                 else:
                     prolog.assertz(tmp)
             except PrologError as error:
