@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm -rf dist &>/dev/null
-python -m pip install --user --upgrade setuptools wheel twip
+python -m pip install --user --upgrade setuptools wheel twine
 python setup.py sdist bdist_wheel
 
 echo -n "Deploy [N/y]? "
