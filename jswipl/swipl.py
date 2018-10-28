@@ -1,6 +1,3 @@
-import os
-import os.path as op
-import tempfile
 from pyswip import Prolog
 from pyswip import Functor
 from pyswip.prolog import PrologError
