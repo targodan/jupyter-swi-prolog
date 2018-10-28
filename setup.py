@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="jswip",
+    name="jswipl",
     version="0.0.1",
     author="Luca Corbatto",
     author_email="luca-pip@corbatto.de",
@@ -23,6 +23,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={
-        'console_scripts': ['jswiplkernel=jswip.jupyter:main'],
+        'console_scripts': ['jswiplkernel=jswipl.jupyter:main'],
     }
 )
