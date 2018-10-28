@@ -45,6 +45,3 @@ class SwiplKernel(Kernel):
                 'payload': [],
                 'user_expressions': {},
                }
-
-if __name__ == '__main__':
-    main()
