@@ -1,12 +1,3 @@
-import os
-import os.path as op
-import tempfile
-import IPython
-import subprocess as sp
-from queue import Queue, Empty
-from threading import Thread
-import swipl
-
 def main():
     from ipykernel.kernelapp import IPKernelApp
     IPKernelApp.launch_instance(kernel_class=SwiplKernel)
