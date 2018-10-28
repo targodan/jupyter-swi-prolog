@@ -5,7 +5,7 @@ from pyswip import Prolog
 from pyswip import Functor
 from pyswip.prolog import PrologError
 
-DEFAULT_LIMIT = 100
+DEFAULT_LIMIT = 10
 
 def format_value(value):
     output = ""
