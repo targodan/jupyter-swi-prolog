@@ -1,0 +1,24 @@
+import setuptools
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="jswip",
+    version="0.0.0",
+    author="Luca Corbatto",
+    author_email="luca-pip@corbatto.de",
+    description="A Jupyter Kernel for SWI-Prolog.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/targodan/jupyter-swi-prolog",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    entry_points={
+        'console_scripts': ['jswipkernel=jswip.jupyter:main'],
+    }
+)
