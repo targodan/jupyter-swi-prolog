@@ -1,4 +1,4 @@
-import swipl
+from . import swipl
 
 def main():
     from ipykernel.kernelapp import IPKernelApp
