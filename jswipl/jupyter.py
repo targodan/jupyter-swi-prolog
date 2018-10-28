@@ -1,3 +1,5 @@
+import swipl
+
 def main():
     from ipykernel.kernelapp import IPKernelApp
     IPKernelApp.launch_instance(kernel_class=SwiplKernel)
