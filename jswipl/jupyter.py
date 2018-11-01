@@ -9,7 +9,7 @@ from ipykernel.kernelbase import Kernel
 
 class SwiplKernel(Kernel):
     implementation = 'SWI-Prolog'
-    implementation_version = '1.0.1'
+    implementation_version = '1.0.2'
     language = 'Prolog'
     language_version = '1.0'
     language_info = {'name': 'swipl',

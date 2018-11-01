@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="jswipl",
-    version="1.0.1",
+    version="1.0.2",
     author="Luca Corbatto",
     author_email="luca-pip@corbatto.de",
     description="A Jupyter Kernel for SWI-Prolog.",
