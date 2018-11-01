@@ -29,7 +29,7 @@ def format_result(result):
         tmpOutput = []
         for var in res:
             tmpOutput.append(var + " = " + format_value(res[var]))
-        output += " ".join(tmpOutput) + " ;\n"
+        output += ", ".join(tmpOutput) + " ;\n"
     output = output[:-3] + " ."
 
     return output
