@@ -78,7 +78,7 @@ def run(code):
                     output.append(format_result(result))
                     result.close()
                 else:
-                    prolog.assertz(tmp)
+                    prolog.assertz('(' + tmp + ')')
             except PrologError as error:
                 ok = False
                 output.append("ERROR: {}".format(error))
