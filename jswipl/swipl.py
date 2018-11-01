@@ -43,7 +43,7 @@ def run(code):
     isQuery = False
     for line in code.split("\n"):
         line = line.strip()
-        if line == "":
+        if line == "" or line[0] == "%":
             continue
 
         if line[:2] == "?-":
